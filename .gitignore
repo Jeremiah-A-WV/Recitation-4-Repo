@@ -5,7 +5,6 @@
 /solution/
 gradlew
 gradlew.bat
-build.gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
