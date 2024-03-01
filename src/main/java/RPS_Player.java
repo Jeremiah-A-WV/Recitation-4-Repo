@@ -10,6 +10,8 @@ public class RPS_Player {
     private static final int SCISSORS = 1;
     private static final int PAPER = 2;
 
+    private final Random rand = new Random();
+
     public RPS_Player(String name){
         this.name = name;
         clear();
@@ -39,16 +41,16 @@ public class RPS_Player {
      * Returns the win percentage as number between 0 and 1.
      * @return win percentage as a double.
      */
-    public double getWinPercentage(){
-        return ((double) numberOfGamesWon / numberOfGamesPlayed);
+    public double getWinPercentage() {
+        return (double) numberOfGamesWon / numberOfGamesPlayed;
     }
 
     /**
      * Starts a new game.
      */
     public void clear(){
-        numberOfGamesWon = 0;
-        numberOfGamesPlayed = 0;
+        this.numberOfGamesWon = 0;
+        this.numberOfGamesPlayed = 0;
     }
 
     /**
@@ -59,39 +61,23 @@ public class RPS_Player {
      * @return Reference to the RPS_Player that won or a null if there is a draw
      */
     public RPS_Player challenge(RPS_Player anotherPlayer){
-        Random rand = new Random();
+        RPS_Player player = null;
         choice = rand.nextInt(3);
         anotherPlayer.choice = rand.nextInt(3);
-
-        RPS_Player result = null;
-
-        if (choice == ROCK) {
-            if (anotherPlayer.choice == SCISSORS) {
-                result = new RPS_Player(name);
-                numberOfGamesWon++;
-            } else if (anotherPlayer.choice == PAPER) {
-                result = anotherPlayer;
-                anotherPlayer.numberOfGamesWon++;
-            }
-        } else if (choice == SCISSORS) {
-            if (anotherPlayer.choice == ROCK) {
-                result = anotherPlayer;
-                anotherPlayer.numberOfGamesWon++;
-            } else if (anotherPlayer.choice == PAPER) {
-                result = new RPS_Player(name);
-                numberOfGamesWon++;
-            }
-        } else {
-            if (anotherPlayer.choice == ROCK) {
-                result = new RPS_Player(name);
-                numberOfGamesWon++;
-            } else if (anotherPlayer.choice == SCISSORS) {
-                result = anotherPlayer;
-                anotherPlayer.numberOfGamesWon++;
+        if (choice != anotherPlayer.choice) {
+            if (choice == ROCK && anotherPlayer.choice== SCISSORS ||
+                    choice == PAPER && anotherPlayer.choice== ROCK ||
+                    choice == SCISSORS && anotherPlayer.choice== PAPER) {
+                numberOfGamesWon+=1;
+                player = this;
+            } else {
+                anotherPlayer.numberOfGamesWon+=1;
+                player = anotherPlayer;
             }
         }
-
-        return result;
+        numberOfGamesPlayed+=1;
+        anotherPlayer.numberOfGamesPlayed+=1;
+        return player;
     }
 
     /**
@@ -102,10 +88,27 @@ public class RPS_Player {
      * @return Reference to the RPS_Player that won or a null if there is a draw
      */
     public RPS_Player keepAndChallenge(RPS_Player anotherPlayer){
-
-
-
-        return challenge(anotherPlayer);
+        RPS_Player player = null;
+        anotherPlayer.choice = rand.nextInt(3);
+        if (choice != anotherPlayer.choice){
+            if(choice == ROCK && anotherPlayer.choice== SCISSORS ||
+                    choice == PAPER && anotherPlayer.choice== ROCK ||
+                    choice == SCISSORS && anotherPlayer.choice== PAPER){
+                numberOfGamesWon+=1;
+                numberOfGamesPlayed+=1;
+                anotherPlayer.numberOfGamesPlayed+=1;
+                player = this;
+            }
+            else{
+                anotherPlayer.numberOfGamesPlayed+=1;
+                anotherPlayer.numberOfGamesWon+=1;
+                numberOfGamesPlayed+=1;
+                player = anotherPlayer;
+            }
+        }
+        numberOfGamesPlayed+=1;
+        anotherPlayer.numberOfGamesPlayed+=1;
+        return player;
     }
 
 }
